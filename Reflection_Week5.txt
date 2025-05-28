@@ -1,0 +1,2 @@
+
+Working with HTTP in a Web API was a major shift from the console-based interactions we used earlier. In the console, inputs and outputs are synchronous and linear, while HTTP communication is stateless and requires a defined contract using verbs like GET and POST. I also had to consider proper use of status codes to communicate success or failure. The biggest difference was setting up the integration test environment and using real HTTP calls to test behavior instead of direct method invocations.

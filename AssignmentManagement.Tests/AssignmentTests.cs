@@ -1,5 +1,8 @@
 ﻿using AssignmentManagement.Core;
+using AssignmentManagement.Core.Interfaces;
 using AssignmentManagement.Core.Models;
+using AssignmentManagement.Core.Services;
+using Moq;
 using System;
 using Xunit;
 
@@ -22,6 +25,23 @@ namespace AssignmentManagement.Tests
 
             // Assert
             Assert.Equal("Initial notes", assignment.Notes);
+        }
+
+        [Fact]
+        public void AddAssignment_ShouldLogMessage()
+        {
+            // Arrange
+            var mockLogger = new Mock<IAppLogger>();
+            var mockFormatter = new Mock<IAssignmentFormatter>();
+            var service = new AssignmentService(mockFormatter.Object, mockLogger.Object);
+
+            var assignment = new Assignment("Test Title", "Test Description", "Test Notes", DateTime.Now.AddDays(-1), Priority.Medium);
+
+            // Act
+            service.AddAssignment(assignment);
+
+            // Assert
+            mockLogger.Verify(logger => logger.Log(It.Is<string>(msg => msg.Contains("Added Assignment"))), Times.Once);
         }
 
         [Fact]
@@ -114,6 +134,24 @@ namespace AssignmentManagement.Tests
 
             // Assert
             Assert.False(isOverdue);
+        }
+
+        [Fact]
+        public void CheckOverdue_ShouldLogOverdueStatus()
+        {
+            // Arrange
+            var mockLogger = new Mock<IAppLogger>();
+            var mockFormatter = new Mock<IAssignmentFormatter>();
+            var service = new AssignmentService(mockFormatter.Object, mockLogger.Object);
+
+            var assignment = new Assignment("Test Title", "Test Description", "Test Notes", DateTime.Now.AddDays(-2), Priority.Medium);
+            service.AddAssignment(assignment);
+
+            // Act
+            service.CheckOverdue("Test Title");
+
+            // Assert
+            mockLogger.Verify(logger => logger.Log(It.Is<string>(msg => msg.Contains("Checked overdue status"))), Times.Once);
         }
     }
 }

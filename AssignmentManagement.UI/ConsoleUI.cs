@@ -153,7 +153,7 @@ namespace AssignmentManagement.UI
         {
             Console.WriteLine("Enter the title of the assignment to mark as complete:");
             var title = Console.ReadLine();
-            if (_assignmentService.MarkAssignmentComplete(title))
+            if (_assignmentService.MarkComplete(title))
             {
                 Console.WriteLine("Assignment marked as complete.");
             }
@@ -265,7 +265,6 @@ namespace AssignmentManagement.UI
                 Console.WriteLine("Failed to update assignment.");
             }
         }
-
 
         private void DeleteAssignment()
         {

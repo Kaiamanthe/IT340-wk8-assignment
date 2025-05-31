@@ -53,7 +53,7 @@ namespace AssignmentManagement.Core.Models
         }
         public bool IsOverdue()
         {
-            return DueDate.HasValue && !IsCompleted && DueDate.Value < DateTime.Now; // Pass after IsCompleted check added
+            return DueDate.HasValue && !IsCompleted && DueDate.Value < DateTime.Now;
         }
 
         public override string ToString()

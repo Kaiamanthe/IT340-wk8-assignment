@@ -24,8 +24,8 @@ namespace AssignmentManagement.Core.Services
             try
             {
                 _assignments.Add(assignment);
-                _logger.Log($"Added Assignment [{assignment.Id}]: {assignment.Title}");
-                return true;
+                bool isOverdue = assignment.IsOverdue();
+                _logger.Log($"Added Assignment: {assignment.Title} | Overdue: {isOverdue}"); return true;
             }
             catch (Exception ex)
             {
@@ -36,11 +36,11 @@ namespace AssignmentManagement.Core.Services
 
         public bool DeleteAssignment(string title)
         {
-            var toRemove = _assignments.FirstOrDefault(a => a.Title == title);
-            if (toRemove != null)
+            var titleTodelete = _assignments.FirstOrDefault(a => a.Title == title);
+            if (titleTodelete != null)
             {
-                _assignments.Remove(toRemove);
-                _logger.Log($"Deleted Assignment [{toRemove.Id}]: {toRemove.Title}");
+                _assignments.Remove(titleTodelete);
+                _logger.Log($"Deleted Assignment: {titleTodelete.Title} | Overdue: {titleTodelete.IsOverdue()}");
                 return true;
             }
             return false;
@@ -60,6 +60,7 @@ namespace AssignmentManagement.Core.Services
             if (assignment != null)
             {
                 assignment.Update(newTitle, newDescription, newNotes, newDueDate, newPriority);
+                _logger.Log($"Updated Assignment: {assignment.Title}"); return true;
                 return true;
             }
             return false;
@@ -71,6 +72,7 @@ namespace AssignmentManagement.Core.Services
             if (assignment != null)
             {
                 assignment.MarkComplete();
+                _logger.Log($"Marked Assignment Complete: {assignment.Title} | Overdue: {assignment.IsOverdue()}");
                 return true;
             }
             return false;
@@ -81,16 +83,14 @@ namespace AssignmentManagement.Core.Services
             return _assignments.FirstOrDefault(a => a.Title.Equals(title, StringComparison.OrdinalIgnoreCase));
         }
 
-        public bool MarkAssignmentComplete(string title)
+        public bool CheckOverdue(string title)
         {
             var assignment = FindAssignmentByTitle(title);
-            if (assignment != null)
-            {
-                assignment.MarkComplete();
-                return true;
-            }
-            return false;
-        }
+            if (assignment == null) return false;
 
+            var result = assignment.IsOverdue();
+            _logger.Log($"Checked overdue status: {assignment.Title} - Overdue: {result}");
+            return result;
+        }
     }
 }

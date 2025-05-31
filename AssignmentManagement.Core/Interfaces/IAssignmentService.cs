@@ -13,8 +13,7 @@ namespace AssignmentManagement.Core.Interfaces
         bool UpdateAssignment(string title, string newTitle, string newDescription, string newNotes, DateTime? newDueDate, Priority? newPriority);
         bool DeleteAssignment(string title);
         bool MarkComplete(string title);
-
         Assignment FindAssignmentByTitle(string title);
-        bool MarkAssignmentComplete(string title);
+        bool CheckOverdue(string title);
     }
 }

@@ -1,6 +1,7 @@
 
 using System.Net;
 using System.Net.Http.Json;
+using AssignmentManagement.Core;
 using AssignmentManagement.Core.Models;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.VisualStudio.TestPlatform.TestHost;
@@ -27,7 +28,7 @@ namespace AssignmentManagement.ApiTests
         [Fact]
         public async Task CanCreateAssignment()
         {
-            var assignment = new Assignment("Test Assignment", "This is a test assignment.", null, AssignmentPriority.Low, "");
+            var assignment = new Assignment("Test Assignment", "This is a test assignment.", "", null, Priority.Low);
             var response = await _client.PostAsJsonAsync("/api/assignment", assignment);
             Assert.Equal(HttpStatusCode.Created, response.StatusCode);
         }
@@ -36,7 +37,7 @@ namespace AssignmentManagement.ApiTests
         public async Task CanGetAllAssignments()
         {
             //create new assignment
-            var assignment = new Assignment("Test2 Assignment", "This is a test assignment.", null, AssignmentPriority.Low, "");
+            var assignment = new Assignment("Test2 Assignment", "This is a test assignment.", "", null, Priority.Low);
             await _client.PostAsJsonAsync("/api/assignment", assignment);
             var response = await _client.GetAsync("/api/assignment");
             response.EnsureSuccessStatusCode();

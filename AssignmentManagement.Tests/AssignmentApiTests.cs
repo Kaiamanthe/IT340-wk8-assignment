@@ -1,11 +1,12 @@
 
+using AssignmentManagement.Api;
+using AssignmentManagement.Core;
+using AssignmentManagement.Core.Models;
+using Microsoft.AspNetCore.Mvc.Testing;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
-using AssignmentManagement.Api;
-using Microsoft.AspNetCore.Mvc.Testing;
 using Xunit;
-using AssignmentManagement.Core.Models;
 
 namespace AssignmentManagement.Tests
 {
@@ -21,7 +22,7 @@ namespace AssignmentManagement.Tests
         [Fact]
         public async Task CreateAssignment_ReturnsCreated()
         {
-            var assignment = new Assignment("Test Task", "This is a test.", null, AssignmentPriority.Low, "");
+            var assignment = new Assignment("Test Assignment", "This is a test assignment.", "", null, Priority.Low);
             var response = await _client.PostAsJsonAsync("/api/assignment", assignment);
             response.EnsureSuccessStatusCode();
         }

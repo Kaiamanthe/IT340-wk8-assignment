@@ -12,10 +12,9 @@ namespace AssignmentManagement.Tests
         public void ListIncomplete_ReturnsOnlyIncompleteAssignments()
         {
             var service = new AssignmentService(new AssignmentFormatter(), new ConsoleAppLogger());
-            var a1 = new Assignment("Title 1", "Desc 1", null, AssignmentPriority.Low, "");
-            var a2 = new Assignment("Title 2", "Desc 2", null, AssignmentPriority.Low, "");
+            var a1 = new Assignment("Title 1", "Desc 1", "", null, Priority.Low);
+            var a2 = new Assignment("Title 2", "Desc 2","",  null, Priority.Low);
             a2.MarkComplete();
-
             service.AddAssignment(a1);
             service.AddAssignment(a2);
 
@@ -38,8 +37,8 @@ namespace AssignmentManagement.Tests
         public void ListIncomplete_ReturnsAll_WhenAllAreIncomplete()
         {
             var service = new AssignmentService(new AssignmentFormatter(), new ConsoleAppLogger());
-            var a1 = new Assignment("Title 1", "Desc 1", null, AssignmentPriority.Low, "");
-            var a2 = new Assignment("Title 2", "Desc 2", null, AssignmentPriority.Low, "");
+            var a1 = new Assignment("Title 1", "Desc 1", "", null, Priority.Low);
+            var a2 = new Assignment("Title 2", "Desc 2", "", null, Priority.Low);
 
             service.AddAssignment(a1);
             service.AddAssignment(a2);
@@ -52,7 +51,7 @@ namespace AssignmentManagement.Tests
         public void AddAssignment_StoresAssignmentCorrectly()
         {
             var service = new AssignmentService(new AssignmentFormatter(), new ConsoleAppLogger());
-            var a = new Assignment("Title", "Desc", null, AssignmentPriority.Low, "");
+            var a = new Assignment("Title", "Desc", "", null, Priority.Low);
             service.AddAssignment(a);
             Assert.Contains(a, service.ListAll());
         }

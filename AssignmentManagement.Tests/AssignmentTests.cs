@@ -1,36 +1,88 @@
-﻿namespace AssignmentManagement.Tests
-{
-    using AssignmentManagement.Core.Models;
+﻿using AssignmentManagement.Core;
+using AssignmentManagement.Core.Models;
+using System;
+using Xunit;
 
+namespace AssignmentManagement.Tests
+{
     public class AssignmentTests
     {
         [Fact]
+        public void AddAssignment_ShouldAddSaveNotes()
+        {
+            // Arrange
+            string title = "Read Chapter 1";
+            string description = "Summarize key points";
+            string notes = "Initial notes";
+            DateTime? dueDate = new DateTime(2025, 12, 31);
+            Priority priority = Priority.Medium;
+
+            // Act
+            var assignment = new Assignment(title, description, notes, dueDate, priority);
+
+            // Assert
+            Assert.Equal("Initial notes", assignment.Notes);
+        }
+
+
+        [Fact]
         public void Constructor_ValidInput_ShouldCreateAssignment()
         {
-            var assignment = new Assignment("Read Chapter 2", "Summarize key points", null, AssignmentPriority.Low, "");
-            Assert.Equal("Read Chapter 2", assignment.Title);
-            Assert.Equal("Summarize key points", assignment.Description);
+            // Arrange
+            string title = "Read Chapter 2";
+            string description = "Summarize key points";
+            string notes = "Note";
+            DateTime? dueDate = new DateTime(2025, 12, 30);
+            Priority priority = Priority.Low;
+
+            // Act
+            var assignment = new Assignment(title, description, notes, dueDate, priority);
+
+            // Assert
+            Assert.Equal(title, assignment.Title);
+            Assert.Equal(description, assignment.Description);
+            Assert.Equal(notes, assignment.Notes);
+            Assert.Equal(dueDate, assignment.DueDate);
+            Assert.Equal(priority, assignment.Priority);
             Assert.False(assignment.IsCompleted);
         }
 
         [Fact]
         public void Constructor_BlankTitle_ShouldThrowException()
         {
-            Assert.Throws<ArgumentException>(() => new Assignment("", "Valid description", null, AssignmentPriority.Low, ""));
+            // Arrange
+            string title = "";
+            string description = "Valid description";
+            string notes = "";
+            DateTime? dueDate = null;
+            Priority priority = Priority.Low;
+
+            // Act & Assert
+            Assert.Throws<ArgumentException>(() =>
+                new Assignment(title, description, notes, dueDate, priority));
         }
 
         [Fact]
         public void Update_BlankDescription_ShouldThrowException()
         {
-            var assignment = new Assignment("Read Chapter 2", "Testing Desc", null, AssignmentPriority.Low, "");
-            Assert.Throws<ArgumentException>(() => assignment.Update("Valid title", ""));
+            // Arrange
+            var assignment = new Assignment("Read Chapter 2", "Initial Desc", "Notes", null, Priority.Low);
+
+            // Act & Assert
+            Assert.Throws<ArgumentException>(() =>
+                assignment.Update("New Title", ""));
         }
 
         [Fact]
         public void MarkComplete_SetsIsCompletedToTrue()
         {
-            var assignment = new Assignment("Task", "Complete the lab", null, AssignmentPriority.Low, "");
+            // Arrange
+            var assignment = new Assignment("Task", "Complete the lab", "Lab notes", null, Priority.Low);
+
+            // Act
             assignment.MarkComplete();
+
+            // Assert
             Assert.True(assignment.IsCompleted);
         }
     }

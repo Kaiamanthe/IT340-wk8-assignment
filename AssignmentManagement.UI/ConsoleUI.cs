@@ -1,4 +1,5 @@
-﻿using AssignmentManagement.Core.Interfaces;
+﻿using AssignmentManagement.Core;
+using AssignmentManagement.Core.Interfaces;
 using AssignmentManagement.Core.Models;
 using System;
 
@@ -62,13 +63,13 @@ namespace AssignmentManagement.UI
             }
         }
 
-        private AssignmentPriority ConvertToPriority(string priorityInput)
+        private Priority ConvertToPriority(string priorityInput)
         {
             return priorityInput switch
             {
-                "L" => AssignmentPriority.Low,
-                "M" => AssignmentPriority.Medium,
-                "H" => AssignmentPriority.High,
+                "L" => Priority.Low,
+                "M" => Priority.Medium,
+                "H" => Priority.High,
                 _ => throw new ArgumentException("Invalid priority input. Use L, M, or H.")
             };
         }
@@ -79,18 +80,29 @@ namespace AssignmentManagement.UI
             var title = Console.ReadLine();
             Console.WriteLine("Enter assignment description: ");
             var description = Console.ReadLine();
+            Console.WriteLine("Enter assignment notes (optional [enter] to leave blank): ");
+            var notes = Console.ReadLine() ?? string.Empty;
             Console.WriteLine("Enter due date (optional, format: yyyy-MM-dd): ");
             var dueDateInput = Console.ReadLine();
             DateTime? dueDate = null;
+            if (!string.IsNullOrWhiteSpace(dueDateInput))
+            {
+                if (DateTime.TryParse(dueDateInput, out var parsedDate))
+                {
+                    dueDate = parsedDate;
+                }
+                else
+                {
+                    Console.WriteLine("Invalid date format. Skipping due date.");
+                }
+            }
             Console.WriteLine("Enter priority (L)ow, (M)edium, (H)igh): ");
             var priorityInput = Console.ReadLine();
-            AssignmentPriority priority = ConvertToPriority(priorityInput);
-            Console.WriteLine("Enter assignment notes (optional [enter] to leave blank): ");
-            var notes = Console.ReadLine() ?? string.Empty;
+            Priority priority = ConvertToPriority(priorityInput);
 
             try
             {
-                var assignment = new Assignment(title, description, dueDate, priority, notes); // Bug: missing due date, priority, notes
+                var assignment = new Assignment(title, description, notes, dueDate, priority);
                 if (_assignmentService.AddAssignment(assignment))
                 {
                     Console.WriteLine("Assignment added successfully.");
@@ -117,7 +129,7 @@ namespace AssignmentManagement.UI
 
             foreach (var assignment in assignments)
             {
-                Console.WriteLine($"- {assignment.Title}: {assignment.Description} (Completed: {assignment.IsCompleted})");
+                Console.WriteLine($"- {assignment.Title}: {assignment.Description} {(string.IsNullOrWhiteSpace(assignment.Notes) ? "" : $" | Notes: {assignment.Notes}")} (Completed: {assignment.IsCompleted})");
             }
         }
 

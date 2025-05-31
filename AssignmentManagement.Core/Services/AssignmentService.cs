@@ -54,12 +54,12 @@ namespace AssignmentManagement.Core.Services
 
         public Assignment FindByTitle(string title) => _assignments.FirstOrDefault(a => a.Title == title);
 
-        public bool UpdateAssignment(string title, string newTitle, string newDescription)
+        public bool UpdateAssignment(string title, string newTitle, string newDescription, string newNotes, DateTime? newDueDate, Priority? newPriority)
         {
             var assignment = FindByTitle(title);
             if (assignment != null)
             {
-                assignment.Update(newTitle, newDescription);
+                assignment.Update(newTitle, newDescription, newNotes, newDueDate, newPriority);
                 return true;
             }
             return false;

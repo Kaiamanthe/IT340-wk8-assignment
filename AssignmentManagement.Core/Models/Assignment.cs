@@ -24,13 +24,24 @@ namespace AssignmentManagement.Core.Models
             IsCompleted = false;
         }
 
-        public void Update(string newTitle, string newDescription)
+        public void Update(string newTitle, string newDescription, string newNotes, DateTime? newDueDate, Priority? newPriority)
         {
             Validate(newTitle, nameof(Title));
             Validate(newDescription, nameof(Description));
+
             Title = newTitle;
             Description = newDescription;
+
+            if (newNotes != null)
+                Notes = newNotes;
+
+            if (newDueDate.HasValue)
+                DueDate = newDueDate;
+
+            if (newPriority.HasValue)
+                Priority = newPriority.Value;
         }
+
         public void MarkComplete()
         {
             IsCompleted = true;
@@ -42,15 +53,17 @@ namespace AssignmentManagement.Core.Models
         }
         public bool IsOverdue()
         {
-            return DueDate.HasValue && !IsCompleted && DueDate.Value < DateTime.Now;
+            return DueDate.HasValue && !IsCompleted && DueDate.Value < DateTime.Now; // Pass after IsCompleted check added
         }
-
 
         public override string ToString()
         {
-            return $"- {Title} ({Priority}) due {DueDate?.ToShortDateString() ?? "N/A"}\n{Description}" +
-                   $"{(string.IsNullOrWhiteSpace(Notes) ? "" : $"\nNotes: {Notes}")}" +
-                   $"\nCompleted: {IsCompleted}";
+            return $"Title: {Title} " +
+                   $"Description: {Description} " +
+                   $"{(string.IsNullOrWhiteSpace(Notes) ? "" : $"Notes: {Notes} ")}" +
+                   $"{(DueDate.HasValue ? $"Due date: {DueDate.Value.ToShortDateString()} " : "")}" +
+                   $"Priority: {Priority} " +
+                   $"Completed: {IsCompleted}";
         }
     }
 

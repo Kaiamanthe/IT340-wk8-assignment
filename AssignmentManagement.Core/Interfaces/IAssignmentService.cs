@@ -10,7 +10,7 @@ namespace AssignmentManagement.Core.Interfaces
         List<Assignment> ListIncomplete();
         List<string> ListFormatted();
         Assignment FindByTitle(string title);
-        bool UpdateAssignment(string title, string newTitle, string newDescription);
+        bool UpdateAssignment(string title, string newTitle, string newDescription, string newNotes, DateTime? newDueDate, Priority? newPriority);
         bool DeleteAssignment(string title);
         bool MarkComplete(string title);
 

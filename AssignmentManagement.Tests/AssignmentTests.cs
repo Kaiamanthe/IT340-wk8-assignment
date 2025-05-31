@@ -24,7 +24,6 @@ namespace AssignmentManagement.Tests
             Assert.Equal("Initial notes", assignment.Notes);
         }
 
-
         [Fact]
         public void Constructor_ValidInput_ShouldCreateAssignment()
         {
@@ -65,12 +64,10 @@ namespace AssignmentManagement.Tests
         [Fact]
         public void Update_BlankDescription_ShouldThrowException()
         {
-            // Arrange
             var assignment = new Assignment("Read Chapter 2", "Initial Desc", "Notes", null, Priority.Low);
 
-            // Act & Assert
             Assert.Throws<ArgumentException>(() =>
-                assignment.Update("New Title", ""));
+                assignment.Update("New Title", "", "New Notes", null, null));
         }
 
         [Fact]
@@ -84,6 +81,39 @@ namespace AssignmentManagement.Tests
 
             // Assert
             Assert.True(assignment.IsCompleted);
+        }
+
+        [Fact]
+        public void ToString_WithNotes_ShouldShowNotesInOutput()
+        {
+            // Arrange
+            var assignment = new Assignment(
+                title: "Write Report",
+                description: "Finish quarterly report",
+                notes: "Make data chart",
+                dueDate: new DateTime(2025, 12, 1),
+                priority: Priority.Medium);
+
+            // Act
+            var output = assignment.ToString();
+
+            // Assert
+            Assert.Contains("Notes: Make data chart", output);
+        }
+
+        [Fact]
+        public void IsOverdue_ShouldReturnFalse_WhenAssignmentIsCompleted()
+        {
+            // Arrange
+            var dueYesterday = DateTime.Now.AddDays(-1);
+            var assignment = new Assignment("Title", "Desc", "Note", dueYesterday, Priority.Medium);
+            assignment.MarkComplete();
+
+            // Act
+            var isOverdue = assignment.IsOverdue();
+
+            // Assert
+            Assert.False(isOverdue);
         }
     }
 }

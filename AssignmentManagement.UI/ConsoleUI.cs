@@ -96,6 +96,7 @@ namespace AssignmentManagement.UI
                     Console.WriteLine("Invalid date format. Skipping due date.");
                 }
             }
+
             Console.WriteLine("Enter priority (L)ow, (M)edium, (H)igh): ");
             var priorityInput = Console.ReadLine();
             Priority priority = ConvertToPriority(priorityInput);
@@ -129,7 +130,7 @@ namespace AssignmentManagement.UI
 
             foreach (var assignment in assignments)
             {
-                Console.WriteLine($"- {assignment.Title}: {assignment.Description} {(string.IsNullOrWhiteSpace(assignment.Notes) ? "" : $" | Notes: {assignment.Notes}")} (Completed: {assignment.IsCompleted})");
+                Console.WriteLine(assignment.ToString());
             }
         }
 
@@ -144,7 +145,7 @@ namespace AssignmentManagement.UI
 
             foreach (var assignment in assignments)
             {
-                Console.WriteLine($"- {assignment.Title}: {assignment.Description} (Completed: {assignment.IsCompleted})");
+                Console.WriteLine(assignment.ToString());
             }
         }
 
@@ -169,7 +170,7 @@ namespace AssignmentManagement.UI
             var assignment = _assignmentService.FindAssignmentByTitle(title);
             if (assignment != null)
             {
-                Console.WriteLine($"Found Assignment: {assignment.Title} - {assignment.Description} (Completed: {assignment.IsCompleted})");
+                Console.WriteLine($"Found Assignment: {assignment.Title} - {assignment.Description} {(string.IsNullOrWhiteSpace(assignment.Notes) ? "" : $" | Notes: {assignment.Notes}")} (Completed: {assignment.IsCompleted})");
             }
             else
             {
@@ -181,19 +182,90 @@ namespace AssignmentManagement.UI
         {
             Console.WriteLine("Enter the title of the assignment to update:");
             var oldTitle = Console.ReadLine();
-            Console.Write("Enter new title: ");
+            var assignment = _assignmentService.FindAssignmentByTitle(oldTitle);
+
+            if (assignment == null)
+            {
+                Console.WriteLine("Assignment not found.");
+                return;
+            }
+
+            Console.WriteLine($"Found Assignment: {assignment}");
+
+            Console.WriteLine("Enter new title:");
             var newTitle = Console.ReadLine();
-            Console.Write("Enter new description: ");
+
+            Console.WriteLine("Enter new description:");
             var newDescription = Console.ReadLine();
-            if (_assignmentService.UpdateAssignment(oldTitle, newTitle, newDescription))
+
+            string newNotes = assignment.Notes;
+            if (string.IsNullOrWhiteSpace(assignment.Notes))
+            {
+                Console.Write("Would you like to add a note? (y/n): ");
+                if (Console.ReadLine()?.Trim().ToLower() == "y")
+                {
+                    Console.Write("Enter note: ");
+                    newNotes = Console.ReadLine();
+                }
+            }
+            else
+            {
+                Console.Write("Would you like to update note? (y/n): ");
+                if (Console.ReadLine()?.Trim().ToLower() == "y")
+                {
+                    Console.Write("Enter new note: ");
+                    newNotes = Console.ReadLine();
+                }
+            }
+
+            DateTime? newDueDate = assignment.DueDate;
+            Console.Write("Would you like to update due date? (y/n): ");
+            if (Console.ReadLine()?.Trim().ToLower() == "y")
+            {
+                Console.Write("Enter new due date (optional, format: yyyy-MM-dd, press enter to leave blank): ");
+                var input = Console.ReadLine();
+                if (!string.IsNullOrWhiteSpace(input))
+                {
+                    if (DateTime.TryParse(input, out var parsedDate))
+                        newDueDate = parsedDate;
+                    else
+                        Console.WriteLine("Invalid date format. Keeping existing due date.");
+                }
+                else
+                {
+                    newDueDate = null;
+                }
+            }
+
+            Priority? newPriority = assignment.Priority;
+            Console.Write("Would you like to update priority? (y/n): ");
+            if (Console.ReadLine()?.Trim().ToLower() == "y")
+            {
+                Console.Write("Enter priority (L)ow, (M)edium, (H)igh (optional, press enter to leave blank): ");
+                var priorityInput = Console.ReadLine();
+                if (!string.IsNullOrWhiteSpace(priorityInput))
+                {
+                    try
+                    {
+                        newPriority = ConvertToPriority(priorityInput.ToUpper());
+                    }
+                    catch
+                    {
+                        Console.WriteLine("Invalid priority input. Keeping existing priority.");
+                    }
+                }
+            }
+
+            if (_assignmentService.UpdateAssignment(oldTitle, newTitle, newDescription, newNotes, newDueDate, newPriority))
             {
                 Console.WriteLine("Assignment updated successfully.");
             }
             else
             {
-                Console.WriteLine("Assignment not found or update failed.");
+                Console.WriteLine("Failed to update assignment.");
             }
         }
+
 
         private void DeleteAssignment()
         {

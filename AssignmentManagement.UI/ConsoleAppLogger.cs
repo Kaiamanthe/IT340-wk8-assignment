@@ -1,4 +1,5 @@
 
+using AssignmentManagement.Core.Interfaces;
 using System;
 
 namespace AssignmentManagement.Core

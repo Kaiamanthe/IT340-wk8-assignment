@@ -1,5 +1,7 @@
 
 using AssignmentManagement.Core;
+using AssignmentManagement.Core.Interfaces;
+using AssignmentManagement.Core.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 

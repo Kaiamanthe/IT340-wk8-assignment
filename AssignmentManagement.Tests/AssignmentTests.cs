@@ -1,6 +1,7 @@
 ﻿namespace AssignmentManagement.Tests
 {
-    using AssignmentManagement.Core;
+    using AssignmentManagement.Core.Models;
+
     public class AssignmentTests
     {
         [Fact]
@@ -21,7 +22,7 @@
         [Fact]
         public void Update_BlankDescription_ShouldThrowException()
         {
-            var assignment = new Assignment("Read Chapter 2", "Testnig Desc", null, AssignmentPriority.Low, "");
+            var assignment = new Assignment("Read Chapter 2", "Testing Desc", null, AssignmentPriority.Low, "");
             Assert.Throws<ArgumentException>(() => assignment.Update("Valid title", ""));
         }
 

@@ -1,6 +1,7 @@
 
 using Microsoft.AspNetCore.Mvc;
-using AssignmentManagement.Core;
+using AssignmentManagement.Core.Interfaces;
+using AssignmentManagement.Core.Models;
 
 namespace AssignmentManagement.Api.Controllers
 {

@@ -1,8 +1,10 @@
+using AssignmentManagement.Core.Interfaces;
+using AssignmentManagement.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace AssignmentManagement.Core
+namespace AssignmentManagement.Core.Services
 {
     public class AssignmentService : IAssignmentService
     {

@@ -1,4 +1,4 @@
-﻿using AssignmentManagement.Core;
+﻿using AssignmentManagement.Core.Services;
 using AssignmentManagement.UI;
 
 using Microsoft.Extensions.DependencyInjection;

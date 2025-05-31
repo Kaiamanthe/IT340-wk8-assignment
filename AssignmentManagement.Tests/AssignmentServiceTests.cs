@@ -1,5 +1,7 @@
 
 using AssignmentManagement.Core;
+using AssignmentManagement.Core.Models;
+using AssignmentManagement.Core.Services;
 using Xunit;
 
 namespace AssignmentManagement.Tests

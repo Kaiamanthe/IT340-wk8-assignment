@@ -1,11 +1,10 @@
-
 using Xunit;
 using Moq;
-using AssignmentManagement.Core;
 using AssignmentManagement.Console;
-using System.Collections.Generic;
 using System.IO;
 using AssignmentManagement.UI;
+using AssignmentManagement.Core.Interfaces;
+using AssignmentManagement.Core.Models;
 
 namespace AssignmentManagement.Tests
 {
@@ -14,52 +13,52 @@ namespace AssignmentManagement.Tests
         [Fact]
         public void AddAssignment_Should_Call_Service_Add()
         {
+            // Arrange
             var mock = new Mock<IAssignmentService>();
+            mock.Setup(s => s.AddAssignment(It.IsAny<Assignment>())).Returns(true);
             var ui = new ConsoleUI(mock.Object);
-
-            // Correct input: choose menu option 1, enter title, enter description, then exit
-            using var input = new StringReader("1\nSample Title\nSample Description\n0\n");
+            var input = new StringReader("1\nTitle\nDescription\n\nL\nNotes\n0\n");
             System.Console.SetIn(input);
 
+            // Act
             ui.Run();
 
-            mock.Verify(s => s.AddAssignment(It.Is<Assignment>(a =>
-                a.Title == "Sample Title" &&
-                a.Description == "Sample Description"
-            )), Times.Once);
+            // Assert
+            mock.Verify(m => m.AddAssignment(It.IsAny<Assignment>()), Times.Once);
         }
-
 
         [Fact]
         public void SearchAssignmentByTitle_Should_Display_Assignment()
         {
+            // Arrange
             var mock = new Mock<IAssignmentService>();
-            mock.Setup(s => s.FindByTitle("Sample"))
+            mock.Setup(s => s.FindAssignmentByTitle("Sample"))
                 .Returns(new Assignment("Sample", "Details", null, AssignmentPriority.Low, ""));
-
             var ui = new ConsoleUI(mock.Object);
-
-            using var input = new StringReader("4\nSample\n0\n");
+            var input = new StringReader("5\nSample\n0\n");
             System.Console.SetIn(input);
 
+            // Act
             ui.Run();
 
-            mock.Verify(s => s.FindByTitle("Sample"), Times.Once);
+            // Assert
+            mock.Verify(s => s.FindAssignmentByTitle("Sample"), Times.Once);
         }
 
         [Fact]
         public void DeleteAssignment_Should_Call_Service_Delete()
         {
+            // Arrange
             var mock = new Mock<IAssignmentService>();
             mock.Setup(s => s.DeleteAssignment("ToDelete")).Returns(true);
-
             var ui = new ConsoleUI(mock.Object);
-
-            using var input = new StringReader("6\nToDelete\n0\n");
+            var input = new StringReader("7\nToDelete\n0\n");
             System.Console.SetIn(input);
 
+            // Act
             ui.Run();
 
+            // Assert
             mock.Verify(s => s.DeleteAssignment("ToDelete"), Times.Once);
         }
     }

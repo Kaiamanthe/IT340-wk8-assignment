@@ -1,5 +1,5 @@
-﻿using AssignmentManagement.Core;
-
+﻿using AssignmentManagement.Core.Interfaces;
+using AssignmentManagement.Core.Models;
 using System;
 
 namespace AssignmentManagement.UI
@@ -185,7 +185,16 @@ namespace AssignmentManagement.UI
 
         private void DeleteAssignment()
         {
-            // TODO: Implement UI for deleting assignment
+            Console.WriteLine("Enter the title of the assignment to delete:");
+            var title = Console.ReadLine();
+            if (_assignmentService.DeleteAssignment(title))
+            {
+                Console.WriteLine("Assignment deleted successfully.");
+            }
+            else
+            {
+                Console.WriteLine("Assignment not found.");
+            }
         }
     }
 }

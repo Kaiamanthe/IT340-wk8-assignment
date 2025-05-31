@@ -1,5 +1,6 @@
+using AssignmentManagement.Core.Models;
 
-namespace AssignmentManagement.Core
+namespace AssignmentManagement.Core.Interfaces
 {
     public interface IAssignmentFormatter
     {

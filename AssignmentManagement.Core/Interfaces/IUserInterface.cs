@@ -1,4 +1,4 @@
-namespace AssignmentManagement.Core
+namespace AssignmentManagement.Core.Interfaces
 {
     public interface IUserInterface
     {

@@ -1,5 +1,4 @@
-
-namespace AssignmentManagement.Core
+namespace AssignmentManagement.Core.Models
 {
     public class Assignment
     {
@@ -14,7 +13,8 @@ namespace AssignmentManagement.Core
 
         public Assignment(string title, string description, DateTime? dueDate, AssignmentPriority priority, string notes = "")
         {
-            ValHelper(title, description);
+            Validate(title, nameof(Title));
+            Validate(description, nameof(Description));
             Title = title;
             Description = description;
             DueDate = dueDate;
@@ -26,7 +26,7 @@ namespace AssignmentManagement.Core
         public void Update(string newTitle, string newDescription)
         {
             Validate(newTitle, nameof(Title));
-
+            Validate(newDescription, nameof(Description));
             Title = newTitle;
             Description = newDescription;
         }
@@ -53,11 +53,6 @@ namespace AssignmentManagement.Core
                 throw new ArgumentException($"{fieldName} cannot be blank or whitespace.");
         }
 
-        private void ValHelper(string titleField, string descriptionField)
-        {
-            Validate(titleField, nameof(Title));
-            Validate(descriptionField, nameof(Description));
-        }
     }
 
     public enum AssignmentPriority

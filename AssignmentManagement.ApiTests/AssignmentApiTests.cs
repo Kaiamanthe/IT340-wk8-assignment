@@ -1,7 +1,7 @@
 
 using System.Net;
 using System.Net.Http.Json;
-using AssignmentManagement.Core;
+using AssignmentManagement.Core.Models;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.VisualStudio.TestPlatform.TestHost;
 

@@ -1,6 +1,7 @@
+using AssignmentManagement.Core.Models;
 using System.Collections.Generic;
 
-namespace AssignmentManagement.Core
+namespace AssignmentManagement.Core.Interfaces
 {
     public interface IAssignmentService
     {

@@ -2,10 +2,10 @@
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
-using AssignmentManagement.Core;
 using AssignmentManagement.Api;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Xunit;
+using AssignmentManagement.Core.Models;
 
 namespace AssignmentManagement.Tests
 {

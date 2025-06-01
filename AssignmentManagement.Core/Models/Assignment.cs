@@ -41,7 +41,6 @@ namespace AssignmentManagement.Core.Models
             if (newPriority.HasValue)
                 Priority = newPriority.Value;
         }
-
         public void MarkComplete()
         {
             IsCompleted = true;

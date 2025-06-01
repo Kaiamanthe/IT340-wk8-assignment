@@ -11,6 +11,7 @@ namespace AssignmentManagement.Tests
 {
     public class ConsoleUITests
     {
+
         [Fact]
         public void AddAssignment_Should_Call_Service_Add()
         {
@@ -68,6 +69,52 @@ namespace AssignmentManagement.Tests
             mock.Verify(s => s.DeleteAssignment("ToDelete"), Times.Once);
         }
 
+        [Fact]
+        public void Update_ShouldReturnAllFields()
+        {
+            // Arrange
+            var assignment = new Assignment("Starting Title", "Starting Description", "Starting Notes", DateTime.Today, Priority.Medium);
 
+            var newTitle = "New Title";
+            var newDescription = "New Description";
+            var newNotes = "New Notes";
+            var newDueDate = DateTime.Today.AddDays(7);
+            var newPriority = Priority.High;
+
+            // Act
+            assignment.Update(newTitle, newDescription, newNotes, newDueDate, newPriority);
+
+            // Assert
+            Assert.Equal(newTitle, assignment.Title);
+            Assert.Equal(newDescription, assignment.Description);
+            Assert.Equal(newNotes, assignment.Notes);
+            Assert.Equal(newDueDate, assignment.DueDate);
+            Assert.Equal(newPriority, assignment.Priority);
+        }
+
+        [Fact]
+        public void Update_ShouldThrow_WhenTitleOrDescriptionIsNull()
+        {
+            var assignment = new Assignment("Starting Title", "Starting Desc", "", null, Priority.Medium);
+
+            Assert.Throws<ArgumentException>(() =>
+                assignment.Update("   ", "New Desc", null, null, null));
+
+            Assert.Throws<ArgumentException>(() =>
+                assignment.Update("New Title", "", null, null, null));
+        }
+
+        [Fact]
+        public void MarkComplete_ShouldSetIsCompletedToTrue()
+        {
+            // Arrange
+            var assignment = new Assignment("Title", "Desc", "", null, Priority.Low);
+
+            // Act
+            assignment.MarkComplete();
+
+            // Assert
+            Assert.True(assignment.IsCompleted);
+        }
     }
 }

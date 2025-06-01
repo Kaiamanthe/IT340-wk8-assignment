@@ -122,6 +122,31 @@ namespace AssignmentManagement.Tests
         }
 
         [Fact]
+        public void ToString_ReturnsAllProperFields_WhenProvided()
+        {
+            // Arrange
+            var dueDate = new DateTime(2025, 12, 25);
+            var assignment = new Assignment(
+                "Title 1",
+                "Description 1",
+                "Some Notes",
+                dueDate,
+                Priority.High
+            );
+
+            // Act
+            var result = assignment.ToString();
+
+            // Assert
+            Assert.Contains("Title: Title 1", result);
+            Assert.Contains("Description: Description 1", result);
+            Assert.Contains("Notes: Some Notes", result);
+            Assert.Contains("Due date: 12/25/2025", result);
+            Assert.Contains("Priority: High", result);
+            Assert.Contains("Completed: False", result);
+        }
+
+        [Fact]
         public void IsOverdue_ShouldReturnFalse_WhenAssignmentIsCompleted()
         {
             // Arrange
@@ -134,6 +159,20 @@ namespace AssignmentManagement.Tests
 
             // Assert
             Assert.False(isOverdue);
+        }
+
+        [Fact]
+        public void IsOverdue_ReturnsTrue_WhenDueAssignmentIsLateAndNotCompleted()
+        {
+            // Arrange
+            var pastDate = DateTime.Now.AddDays(-3);
+            var assignment = new Assignment("Test", "Test Description", "", pastDate, Priority.Medium);
+
+            // Act
+            var isOverdue = assignment.IsOverdue();
+
+            // Assert
+            Assert.True(isOverdue);
         }
 
         [Fact]
